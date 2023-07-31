@@ -2,7 +2,7 @@
  * @Author: (xiao_huan) 1156492597@qq.com
  * @Date: 2023-07-27 22:56:11
  * @LastEditors: (xiao_huan) 1156492597@qq.com
- * @LastEditTime: 2023-07-29 21:45:56
+ * @LastEditTime: 2023-07-31 19:53:41
  * @FilePath: \Numerical Analysis Exercise\Exercise1_2\test2.cpp
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -38,7 +38,7 @@ std::vector<int> decimalToBaseN(double decimalNumber, int bits1, int bits2, int 
     double decimalPart = std::abs(decimalNumber) - static_cast<double>(integerPart);  //小数部分
 
     // 整数部分转换
-    int precision1 = bits1;  // 位数上限bits1
+    int precision1 = bits1-1;  // 位数上限bits1
     while (integerPart > 0) {
         int remainder = integerPart % base;
         customRadixBits.insert(customRadixBits.begin(), remainder);
@@ -50,8 +50,8 @@ std::vector<int> decimalToBaseN(double decimalNumber, int bits1, int bits2, int 
     if(precision1 == 0){
         for(int i = 1; i <= bits2; i++){
             customRadixBits.push_back(0);
-            customRadixBits.insert(customRadixBits.begin(), 0);
         }
+        customRadixBits.insert(customRadixBits.begin(), determineSign(decimalNumber));
         return customRadixBits;
     }
     // 幂的部分
@@ -99,16 +99,16 @@ std::vector<int> decimalToBaseN(double decimalNumber, int bits1, int bits2, int 
     return truncatedVector;
 }
 
-int main() {
-    double decimalNumber = -567578797978957.7686;
-    std::vector<int> customRadixBits = decimalToBaseN(decimalNumber, 10, 2, 3);
+// int main() {
+//     double decimalNumber = -36;
+//     std::vector<int> customRadixBits = decimalToBaseN(decimalNumber, 5, 5, 3);
 
-    // Display the binary representation
-    std::cout << decimalNumber << " in binary is: ";
-    for (int bit : customRadixBits) {
-        std::cout << bit;
-    }
-    std::cout << std::endl;
+//     // Display the binary representation
+//     std::cout << decimalNumber << " in binary is: ";
+//     for (int bit : customRadixBits) {
+//         std::cout << bit;
+//     }
+//     std::cout << std::endl;
 
-    return 0;
-}
+//     return 0;
+// }
