@@ -2,7 +2,7 @@
  * @Author: (xiao_huan) 1156492597@qq.com
  * @Date: 2023-07-27 22:56:11
  * @LastEditors: (xiao_huan) 1156492597@qq.com
- * @LastEditTime: 2023-07-31 19:53:41
+ * @LastEditTime: 2023-08-14 11:30:43
  * @FilePath: \Numerical Analysis Exercise\Exercise1_2\test2.cpp
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -36,17 +36,19 @@ std::vector<int> decimalToBaseN(double decimalNumber, int bits1, int bits2, int 
 
     int integerPart = static_cast<int>(abs(decimalNumber)); //整数部分
     double decimalPart = std::abs(decimalNumber) - static_cast<double>(integerPart);  //小数部分
+    // std::cout << integerPart << ',' << decimalPart << std::endl; //no bug
 
     // 整数部分转换
-    int precision1 = bits1-1;  // 位数上限bits1
+    int precision1 = bits1-1;  // 位数上限bits1,符号位1位
     while (integerPart > 0) {
         int remainder = integerPart % base;
-        customRadixBits.insert(customRadixBits.begin(), remainder);
+        customRadixBits.insert(customRadixBits.begin(), remainder); // 先存整数位
         integerPart /= base;
         precision1--;
     }
-    // 整数部分使用了bits1-precision1位，若precision1>0，则补充小数位；若precision1<=0，结束
+    // 整数部分使用了bits1-1-precision1位，若precision1>0，则补充小数位；若precision1<=0，结束
     // std::cout << precision1 << std::endl;
+    // 若precision1=0，刚刚好，幂为零
     if(precision1 == 0){
         for(int i = 1; i <= bits2; i++){
             customRadixBits.push_back(0);
@@ -54,10 +56,13 @@ std::vector<int> decimalToBaseN(double decimalNumber, int bits1, int bits2, int 
         customRadixBits.insert(customRadixBits.begin(), determineSign(decimalNumber));
         return customRadixBits;
     }
+    // else 补充幂的部分
+    // if precision < 0,到最后截断
     // 幂的部分
-    int power = precision1;
+    int power = -precision1;
     int absPower = abs(power);
-    int precision2 = bits2;  // 位数上限bits2 
+    int precision2 = bits2-1;  // 位数上限bits2,符号位1位
+    // 位数太多可直接判定溢出
     while (absPower > 0 && precision2 > 0) {
         int remainder = absPower % base;
         powerBits.insert(powerBits.begin(), remainder);
@@ -71,11 +76,12 @@ std::vector<int> decimalToBaseN(double decimalNumber, int bits1, int bits2, int 
     }
     // 补充符号位
     powerBits.insert(powerBits.begin(), determineSign(power));
-    if(precision2 == 0)// 超出上限，输出符号位+11111111
+    if(precision2 == 0)// 超出上限，输出符号位+11111111+符号位+11111
     {
         std::vector<int> infVector;
-        infVector.resize(bits1+bits2-1, 1);
+        infVector.resize(bits1+bits2-1, base-1);
         infVector.insert(infVector.begin(), determineSign(decimalNumber));
+        infVector[bits1] = determineSign(power);
         return infVector;
     }
     // 小数部分转换
@@ -99,16 +105,16 @@ std::vector<int> decimalToBaseN(double decimalNumber, int bits1, int bits2, int 
     return truncatedVector;
 }
 
-// int main() {
-//     double decimalNumber = -36;
-//     std::vector<int> customRadixBits = decimalToBaseN(decimalNumber, 5, 5, 3);
+int main() {
+    double decimalNumber = 0.1;
+    std::vector<int> customRadixBits = decimalToBaseN(decimalNumber, 10, 10, 10);
 
-//     // Display the binary representation
-//     std::cout << decimalNumber << " in binary is: ";
-//     for (int bit : customRadixBits) {
-//         std::cout << bit;
-//     }
-//     std::cout << std::endl;
+    // Display the binary representation
+    std::cout << decimalNumber << " in binary is: ";
+    for (int bit : customRadixBits) {
+        std::cout << bit;
+    }
+    std::cout << std::endl;
 
-//     return 0;
-// }
+    return 0;
+}
