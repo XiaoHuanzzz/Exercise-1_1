@@ -32,7 +32,7 @@ The zero point is 1.39726, the procedure was successful.
 
 
 
-####  flasePosition by secantMethod, refined by guaranteeing root rackets
+####  falsePosition by secantMethod, refined by guaranteeing root rackets
 
 ```
 D:\Numerical Analysis Exercise\Exercise2_3>g++ -o main secantMethod2.0.cpp 
