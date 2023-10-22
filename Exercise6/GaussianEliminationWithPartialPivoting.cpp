@@ -4,7 +4,7 @@
 
 using namespace std;
 
-vector<double> GaussianEliminationWithScaledPartialPivoting(int equationN, vector<vector<double>> augmentedMatrixA){
+vector<double> GaussianEliminationWithPartialPivoting(int equationN, vector<vector<double>> augmentedMatrixA){
     int n = equationN;
     vector<vector<double>> m(n, vector<double>(n, 0.0));
     vector<vector<double>> A = augmentedMatrixA;
@@ -15,10 +15,12 @@ vector<double> GaussianEliminationWithScaledPartialPivoting(int equationN, vecto
     }
     for(int i = 0; i < n-1; i++){
         int p = i;
+        int maxPos = i;
         double tempMax = abs(A[nRow[p]][i]);
         while(1){
             if(tempMax < abs(A[nRow[p]][i])){
                 tempMax = abs(A[nRow[p]][i]);
+                maxPos = p;
             }
             p++;
             if(p == equationN){
@@ -29,10 +31,10 @@ vector<double> GaussianEliminationWithScaledPartialPivoting(int equationN, vecto
             cout << "No unique solution exists.";
             return x;
         }
-        if(nRow[i] != nRow[p]){
+        if(nRow[i] != nRow[maxPos]){
             int nCopy = nRow[i];
-            nRow[i] = nRow[p];
-            nRow[p] = nCopy;
+            nRow[i] = nRow[maxPos];
+            nRow[maxPos] = nCopy;
         }
         for(int j = i+1; j < n; j++){
             m[nRow[j]][i] = A[nRow[j]][i]/A[nRow[i]][i];
@@ -49,7 +51,7 @@ vector<double> GaussianEliminationWithScaledPartialPivoting(int equationN, vecto
     for(int i = n-2; i >= 0; i--){
         x[i] = A[nRow[i]][n];
         for(int j = i+1; j <= n-1; j++){
-            x[i] -=A[nRow[i]][j]*x[j];
+            x[i] -= A[nRow[i]][j]*x[j];
         }
         x[i] /= A[nRow[i]][i];
     }
@@ -63,7 +65,7 @@ vector<double> GaussianEliminationWithScaledPartialPivoting(int equationN, vecto
 
 int main(){
     int equationN = 3;
-    vector<vector<double>> augmentedMatrixA = {{1,3,1,4},{0,1,4,5},{0,1,5,6}};
-    vector<double> x = GaussianEliminationWithScaledPartialPivoting(equationN, augmentedMatrixA);
+    vector<vector<double>> augmentedMatrixA = {{1,3,1,4},{1,1,4,5},{0,1,5,6}};
+    vector<double> x = GaussianEliminationWithPartialPivoting(equationN, augmentedMatrixA);
     return 0;
 }
