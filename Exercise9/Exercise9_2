@@ -1,0 +1,29 @@
+<h2 align = "center">
+                 Exercise9_2
+
+
+####  19.
+
+Prove Theorem 9.13.
+
+An n×n matrix A is similar to a diagonal matrix D if and only if A has n linearly independent eigenvectors. In this case, $D = S^{−1}AS$, where the columns of S consist of the eigenvectors, and the ith diagonal element of D is the eigenvalue of A that corresponds to the ith column of S.
+
+$\Rightarrow: $
+
+ A is similar to a diagonal matrix D $\Rightarrow \exist P\in \mathbb{R}^{n\times n}, A = PDP^{-1}$
+
+$\Rightarrow AP = PD$
+
+For each column, $Ap_i = Pd_i$
+
+$\Rightarrow Ap_i = d_{ii}p_i$
+
+which indicates that $p_i$ is an eigenvector of $d_{ii}$
+
+by induction, all the columns of P are the eigenvectors of A.
+
+and P is invertible, so all the n eigenvectors are linearly independent.
+
+$\Leftarrow:$
+
+as above. :)
